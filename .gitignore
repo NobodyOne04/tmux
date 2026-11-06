@@ -1,0 +1,4 @@
+# plugins and saved sessions live in ~/.local/share/tmux, never here
+plugins/
+resurrect/
+.DS_Store

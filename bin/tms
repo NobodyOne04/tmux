@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# tms [folder]: jump to a project's tmux session, creating it if needed.
+#
+#   no argument: fuzzy-pick from open sessions (●), zoxide's frequent folders
+#   and ~/projects. One session per project, named after its folder; direnv
+#   loads the project's .envrc as soon as the shell starts there.
+#   Inside tmux it switches the client; outside it attaches.
+#
+#   in the picker:  Enter open · Ctrl-x kill the selected session
+set -euo pipefail
+
+projects=${TMS_PROJECTS:-$HOME/projects}
+
+session_name() { basename "$1" | tr '.: ' '___'; }
+
+candidates() {
+  # open sessions first, marked; then folders, without duplicates
+  tmux list-sessions -F '#{session_activity} #{session_name}' 2>/dev/null |
+    sort -rn | awk '$2 != "scratch" { print "●\t" $2 }' || true   # no server yet: no sessions
+  {
+    if command -v zoxide >/dev/null; then zoxide query -l 2>/dev/null | head -n 40 || true; fi
+    find "$projects" -mindepth 1 -maxdepth 1 -type d ! -name '.*' 2>/dev/null | sort
+  } | awk '!seen[$0]++' | sed "s|^$HOME|~|" | awk '{ print " \t" $0 }'
+}
+
+pick() {
+  candidates | fzf \
+    --ansi --no-sort --delimiter='\t' --layout=reverse --height=100% --border=none \
+    --prompt='session › ' --pointer='▍' \
+    --header='enter: open · ctrl-x: kill session' \
+    --color='hl:#00e5ff,hl+:#00e5ff,pointer:#00e5ff,prompt:#00e5ff,header:#4a4c54,bg+:#1d3a45' \
+    --preview='e={2}; if [[ {1} == ● ]]; then tmux capture-pane -ep -t "=$e:" 2>/dev/null; else d=${e/#\~/$HOME}; eza --tree --level=1 --icons=always --color=always "$d" 2>/dev/null || ls "$d"; fi' \
+    --preview-window='right,55%,border-left' \
+    --bind='ctrl-x:execute-silent(tmux kill-session -t "={2}")+reload('"$0"' --list)'
+}
+
+[[ ${1:-} == --list ]] && { candidates; exit 0; }
+
+if [[ $# -ge 1 ]]; then
+  dir=$(cd "$1" && pwd)
+  name=$(session_name "$dir")
+else
+  choice=$(pick) || exit 0
+  [[ -n $choice ]] || exit 0
+  marker=${choice%%$'\t'*}
+  item=${choice#*$'\t'}
+  if [[ $marker == ● ]]; then
+    name=$item dir=''
+  else
+    dir=${item/#\~/$HOME}
+    name=$(session_name "$dir")
+  fi
+fi
+
+if ! tmux has-session -t "=$name" 2>/dev/null; then
+  tmux new-session -d -s "$name" -c "$dir"
+fi
+
+if [[ -n ${TMUX:-} ]]; then
+  tmux switch-client -t "=$name"
+else
+  tmux attach-session -t "=$name"
+fi
