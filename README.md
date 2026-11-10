@@ -9,7 +9,8 @@ Linux and macOS.
   which is which (needs smart-splits.nvim, which the nvim repo has).
 - **A session per project:** Alt-s, pick a project, you're in it; direnv loads its environment.
 - **Popups:** lazygit, a scratch shell that keeps running, btop, a menu of every action.
-- **Sessions survive reboots** (resurrect + continuum): windows, panes, folders and programs come back.
+- **Sessions survive reboots** (resurrect + continuum): windows, panes, folders and programs come back
+  (not the text that was on screen: that would put printed secrets on disk).
 
 ## Install
 
@@ -91,7 +92,7 @@ tmux.conf            entry point (~/.config/tmux → this repo): loads conf/*
 conf/options.conf    terminal features (true colour, undercurl, clipboard, extended keys, images), behaviour
 conf/keys.conf       all key bindings and the menu
 conf/theme.conf      status bar, borders, popups, menus
-conf/plugins.conf    tpm, resurrect, continuum, extrakto (auto-installed on first start)
+conf/plugins.conf    tpm, resurrect, continuum, extrakto (missing ones installed on every start)
 bin/tms              the session picker
 scripts/link.sh      link / unlink / status
 ```
@@ -110,7 +111,8 @@ scripts/link.sh      link / unlink / status
 
 ## Notes
 
-- Needs tmux 3.4 or newer (popup borders, `#{d:current_file}`).
+- Needs tmux 3.5 or newer (`extended-keys-format`; also popup borders, `#{d:current_file}`). Ubuntu 24.04 ships
+  3.4, which can't load this config.
 - nvim inside tmux gets true colour, undercurl, `Esc` without delay, focus events (autoread) and images.
 - The prefix stays `Ctrl-b`: `Ctrl-a` is zsh's beginning-of-line and `Ctrl-Space` is nvim completion; with the Alt
   keys you rarely need it. `Ctrl-h` / `Ctrl-l` stay nvim's side-scroll keys.

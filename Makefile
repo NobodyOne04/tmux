@@ -18,7 +18,7 @@ deps: ## Install tmux and what the config uses (fzf, zoxide, lazygit, btop, pyth
 		brew install tmux fzf zoxide lazygit btop eza python3; \
 	elif command -v pacman >/dev/null; then \
 		sudo pacman -S --needed tmux fzf zoxide lazygit btop eza python git; \
-	else echo "install yourself: tmux (3.4+) fzf zoxide lazygit btop eza python3"; fi
+	else echo "install yourself: tmux (3.5+) fzf zoxide lazygit btop eza python3"; fi
 
 link: ## Link ~/.config/tmux and ~/.local/bin/tms (old files backed up)
 	@./scripts/link.sh link
