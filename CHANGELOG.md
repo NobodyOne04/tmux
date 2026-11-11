@@ -4,6 +4,7 @@
 
 ### Added
 - `CLAUDE.md`: how to work on this repo with Claude Code
+- CI runs `make check` on every PR, in an Arch container (current tmux; Ubuntu's 3.4 can't load the config)
 
 ### Fixed
 - Plugins (resurrect, continuum, extrakto) were never installed or loaded: tpm reads the plugin list from

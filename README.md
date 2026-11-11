@@ -104,7 +104,7 @@ scripts/link.sh      link / unlink / status
 | `make install` | `deps` + `link` + `update` |
 | `make deps` | tmux, fzf, zoxide, lazygit, btop, eza, python3 (brew or pacman) |
 | `make link` / `unlink` / `status` | manage `~/.config/tmux` and `~/.local/bin/tms` |
-| `make check` | load the config in a throwaway tmux server and fail on any error |
+| `make check` | load the config in a throwaway tmux server and fail on any error (CI runs it on every PR) |
 | `make reload` | reload the config in the running tmux |
 | `make update` | install missing plugins, update all |
 | `make clean` | delete the downloaded plugins (re-installed on next start) |

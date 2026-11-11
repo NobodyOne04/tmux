@@ -21,7 +21,8 @@ so the checked-out branch is the config the next tmux server loads. Keys and fea
 ## Conventions
 - The `@plugin` lines stay in `tmux.conf`: tpm finds plugins by reading that file's text and can't follow
   `source-file -F`. A plugin listed elsewhere is silently never installed or loaded.
-- Needs tmux 3.5+ (`extended-keys-format`). GitHub's Ubuntu runners have 3.4, hence no CI.
+- Needs tmux 3.5+ (`extended-keys-format`). CI runs `make check` in an Arch container
+  (`.github/workflows/check.yml`): GitHub's Ubuntu runners only have tmux 3.4.
 - Alt-h/j/k/l and Alt-Shift-h/j/k/l are shared with nvim's smart-splits (`@pane-is-vim`); change both repos
   together. Before binding a key, check `conf/keys.conf`, nvim (`~/projects/nvim/CLAUDE.md`) and Ghostty.
   Alt-c/t/p/n are taken from zsh on purpose.

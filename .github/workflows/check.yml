@@ -1,0 +1,17 @@
+name: check
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # Arch, not the runner's Ubuntu: Ubuntu has tmux 3.4, this config needs 3.5+,
+    # and Arch's current tmux is what the Arch machine runs anyway
+    container: archlinux:base
+    steps:
+      - run: pacman -Syu --noconfirm --needed tmux make bash git
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - run: make check
