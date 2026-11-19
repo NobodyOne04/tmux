@@ -17,8 +17,10 @@ so the checked-out branch is the config the next tmux server loads. Keys and fea
   (palette in its header) · `conf/plugins.conf` plugin settings, tpm bootstrap.
 - `bin/tms`: session picker (fzf over open sessions, zoxide, `~/projects`), also linked to `~/.local/bin/tms`.
 - Plugins and saved sessions live outside the repo: `~/.local/share/tmux/{plugins,resurrect}`.
+- `docs/adr/`: decision records (`.adr`), index in `docs/adr/README.md`.
 
 ## Conventions
+- Read the ADR before changing a recorded decision; commit subjects carry its number (`commit-style`).
 - The `@plugin` lines stay in `tmux.conf`: tpm finds plugins by reading that file's text and can't follow
   `source-file -F`. A plugin listed elsewhere is silently never installed or loaded.
 - Needs tmux 3.5+ (`extended-keys-format`). CI runs `make check` in an Arch container

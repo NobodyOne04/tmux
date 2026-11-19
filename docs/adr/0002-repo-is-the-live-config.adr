@@ -1,0 +1,33 @@
+# 0002. The repo is the live config, one config for macOS and Arch, tmux 3.5+
+
+- Status: Proposed
+- Date: 2026-11-19
+
+`~/.config/tmux` is a symlink to this repo, so the checked-out branch is what tmux loads, on
+both machines, from one set of files.
+
+## Technical details
+- **Linking** (`scripts/link.sh link|unlink|status`, `make link`/`unlink`/`status`):
+  `~/.config/tmux` → the repo, `~/.local/bin/tms` → `bin/tms`. An existing target is moved
+  to `<file>.bak-<date>`; `unlink` restores the newest backup. `~/.tmux.conf` is moved away
+  on `link` because tmux reads it *instead of* `~/.config/tmux/tmux.conf`.
+- **Split config**: `tmux.conf` is only the entry point; it sources `conf/options.conf`
+  (behaviour), `conf/keys.conf` (bindings + menu), `conf/theme.conf` (look) and
+  `conf/plugins.conf` by path relative to itself
+  (`source-file -F '#{d:current_file}/conf/…'`), so it works linked or not.
+- **State outside the repo**: plugins and saved sessions live in
+  `~/.local/share/tmux/{plugins,resurrect}`, never in git.
+- **Platforms**: the same files on macOS (Homebrew, Ghostty with
+  `macos-option-as-alt = left`) and Arch (pacman). `make deps` installs tmux, fzf, zoxide,
+  lazygit, btop, eza, python3 with whichever package manager exists.
+- **tmux 3.5+**: required by `extended-keys-format`, popup borders and
+  `#{d:current_file}`. Ubuntu 24.04's 3.4 can't load the config (see
+  [0007](0007-make-check-in-arch-ci.adr)).
+- **Consequences**: switching branches changes the config the next server loads, so after
+  pushing a branch the checkout goes back to `main`; after a merge, `git pull` and
+  `make reload`, and pull on the other machine.
+
+## Technologies and alternatives
+- Involved: tmux 3.5+, bash, GNU make, Homebrew / pacman.
+- Alternatives: copying files into `~/.config` (drifts from the repo); a dotfile manager
+  such as stow or chezmoi (one more tool for two links); one big `tmux.conf` (hard to scan).

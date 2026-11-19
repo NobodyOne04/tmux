@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- ADRs in `docs/adr/`: the decisions behind the config, recorded retroactively
 - `CLAUDE.md`: how to work on this repo with Claude Code
 - CI runs `make check` on every PR, in an Arch container (current tmux; Ubuntu's 3.4 can't load the config)
 

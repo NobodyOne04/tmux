@@ -1,0 +1,33 @@
+# 0003. Alt keys for everyday actions, navigation shared with nvim, prefix stays Ctrl-b
+
+- Status: Proposed
+- Date: 2026-11-19
+
+Everything done all day is Alt + key with no prefix, and Alt-h/j/k/l moves across tmux panes
+and nvim splits as if they were one thing.
+
+## Technical details
+- **No-prefix keys** (`conf/keys.conf`, `bind -n`): `Alt-h/j/k/l` move, `Alt-H/J/K/L`
+  resize, `Alt-\` / `Alt--` split in the same folder, `Alt-z` zoom, `Alt-c` new window,
+  `Alt-1…9` / `Alt-n` / `Alt-p` windows, `Alt-s` sessions ([0005](0005-tms-session-per-project.adr)),
+  `Alt-g` lazygit popup, `Alt-t` scratch shell popup (toggles; the `scratch` session keeps
+  running), `Alt-v` copy mode.
+- **Shared with nvim**: in a pane where smart-splits.nvim set `@pane-is-vim`, the Alt key is
+  sent to nvim (`send-keys M-h`); nvim moves between its splits and hands over to tmux at
+  its edge. Otherwise tmux moves, and stops at the window edge (`#{pane_at_left}` …) instead
+  of wrapping. The nvim side is nvim ADR 0010; both repos change together.
+- **Prefix stays `Ctrl-b`**: `Ctrl-a` is zsh's beginning-of-line and `Ctrl-Space` is nvim
+  completion. Prefix keys are for rare actions; `prefix Space` opens a menu with all of them
+  (`display-menu`).
+- **Reserved keys**: `Alt-c/t/p/n` are taken from zsh on purpose; `Ctrl-h` / `Ctrl-l` stay
+  nvim's. Before binding a key, check `conf/keys.conf`, nvim's `CLAUDE.md` and Ghostty.
+- **Copy mode**: vi keys; copies go to the system clipboard through the terminal (OSC 52,
+  `set-clipboard on`), so it works the same on macOS, Wayland and over ssh.
+- **Consequences**: on macOS only the left Option key is Alt; Alt combinations are no longer
+  available to programs inside tmux.
+
+## Technologies and alternatives
+- Involved: smart-splits.nvim (nvim repo), Ghostty / kitty extended keys (`csi-u`).
+- Alternatives: vim-tmux-navigator with `Ctrl-h/j/k/l` (clashes with nvim side-scroll keys);
+  `Ctrl-a` or `Ctrl-Space` prefix (clash with zsh and nvim); prefix for everything (two
+  keystrokes for the most frequent actions).
