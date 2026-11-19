@@ -1,0 +1,28 @@
+# 0005. A session per project, picked with tms
+
+- Status: Proposed
+- Date: 2026-11-19
+
+`tms` (Alt-s inside tmux, `tms` from any shell) fuzzy-picks a project and jumps to its own
+session, created on first use.
+
+## Technical details
+- **Script**: `bin/tms`, bash with `set -euo pipefail`, linked to `~/.local/bin/tms`
+  ([0002](0002-repo-is-the-live-config.adr)); inside tmux it runs in a popup (`Alt-s`,
+  menu entry `s`).
+- **Candidates**, in order, without duplicates: open sessions marked `●` (most recent
+  activity first, `scratch` hidden), up to 40 of zoxide's frequent folders, then the
+  folders in `${TMS_PROJECTS:-~/projects}`.
+- **Picker**: fzf with a preview: a session's screen (`capture-pane`) or a folder's listing
+  (`eza --tree --level=1`, `ls` fallback). `Ctrl-x` kills the selected session and reloads
+  the list (`tms --list`).
+- **Session**: named after the folder (`.`, `:` and spaces become `_`), started in that
+  folder (`new-session -d -c`), so direnv loads the project's `.envrc` / `.env` / venv at
+  once. Inside tmux it switches the client; outside it attaches. `tms <dir>` skips the
+  picker.
+
+## Technologies and alternatives
+- Involved: fzf, zoxide (optional), eza (optional), direnv (zsh repo).
+- Alternatives: tmux's `choose-tree` alone (only existing sessions, kept as `prefix s`);
+  tmuxinator / tmuxp (per-project layout files to maintain); sesh / t-smart-session-manager
+  (an extra dependency for ~60 lines of bash).

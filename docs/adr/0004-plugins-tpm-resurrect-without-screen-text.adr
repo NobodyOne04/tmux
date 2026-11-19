@@ -1,0 +1,30 @@
+# 0004. Plugins through tpm; sessions survive reboots without saving screen text
+
+- Status: Proposed
+- Date: 2026-11-19
+
+tpm installs a small plugin set, and resurrect + continuum bring sessions back after a reboot,
+but never write the text on screen to disk.
+
+## Technical details
+- **Plugin list in `tmux.conf`**: tpm finds plugins by reading the *text* of
+  `~/.config/tmux/tmux.conf` and can't follow `source-file -F`. While the `@plugin` lines
+  lived in `conf/plugins.conf`, nothing was ever installed or loaded (fixed in #1). A plugin
+  listed anywhere else is silently ignored.
+- **Plugins**: `tmux-plugins/tpm`, `tmux-resurrect`, `tmux-continuum`, `laktak/extrakto`
+  (prefix Tab: fuzzy-pick a path / URL / word from the screen, copied via OSC 52).
+- **Bootstrap** (`conf/plugins.conf`, loaded last so continuum can hook the status line):
+  `TMUX_PLUGIN_MANAGER_PATH=~/.local/share/tmux/plugins`; tpm is cloned if missing, then
+  `install_plugins` runs in the background on every start, because tpm only installs right
+  after it is cloned. `make update` installs and updates all; `make clean` deletes them.
+- **Sessions**: `@resurrect-dir ~/.local/share/tmux/resurrect`, `@continuum-save-interval 15`,
+  `@continuum-restore on`; restarted programs: `lazygit btop k9s ssh "~uv run" "~go run"
+  "~make run-server"`. Manual save / restore: `prefix C-s` / `prefix C-r`.
+- **No screen text**: `@resurrect-capture-pane-contents off`. With it on, whatever was printed
+  (`cat .env`, `env`, tokens) went to disk, unencrypted, every 15 minutes. Windows, panes,
+  folders and programs are still restored; scrollback is not.
+
+## Technologies and alternatives
+- Involved: tpm, tmux-resurrect, tmux-continuum, extrakto (needs python3, fzf).
+- Alternatives: no plugin manager, vendored plugins (updates by hand, plugins in git);
+  capturing pane contents (convenient, leaks secrets to disk).

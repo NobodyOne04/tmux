@@ -1,0 +1,27 @@
+# 0007. Test with make check in a throwaway server; CI in an Arch container
+
+- Status: Proposed
+- Date: 2026-11-19
+
+`make check` loads the whole config into a separate tmux server and fails on any output; CI
+runs it on every PR inside Arch, because Ubuntu's tmux is too old.
+
+## Technical details
+- **`make check`** (`Makefile`): `bash -n` on `bin/tms` and `scripts/link.sh`, then
+  `TMUX_CONFIG_CHECK=1 tmux -L tmux-check-$$ -f /dev/null new-session -d \; source-file
+  tmux.conf`; any non-zero exit or any output fails it, and the throwaway server is killed.
+  It never touches the running server.
+- **No network**: `tmux.conf` skips `conf/plugins.conf` when `TMUX_CONFIG_CHECK` is set, so
+  the check can't catch plugin problems. The full test with plugins is in `CLAUDE.md`
+  (uses the real plugin dir).
+- **CI** (`.github/workflows/check.yml`): on every pull request and push to `main`,
+  `ubuntu-latest` running `container: archlinux:base`, `pacman -Syu tmux make bash git`,
+  `actions/checkout` pinned by SHA (v5), then `make check`. `permissions: contents: read`.
+- **Why Arch**: GitHub's Ubuntu runners have tmux 3.4, which can't load the config
+  ([0002](0002-repo-is-the-live-config.adr)); Arch's current tmux is also what the Arch
+  machine runs.
+
+## Technologies and alternatives
+- Involved: GitHub Actions, `archlinux:base` image.
+- Alternatives: Ubuntu runner (tmux 3.4 too old); building tmux from source in CI (slow,
+  another moving part); macOS runner (Homebrew tmux works, but slower and costlier).
