@@ -1,6 +1,6 @@
 # 0005. A session per project, picked with tms
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 `tms` (Alt-s inside tmux, `tms` from any shell) fuzzy-picks a project and jumps to its own

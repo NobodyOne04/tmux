@@ -1,6 +1,6 @@
 # 0007. Test with make check in a throwaway server; CI in an Arch container
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 `make check` loads the whole config into a separate tmux server and fails on any output; CI

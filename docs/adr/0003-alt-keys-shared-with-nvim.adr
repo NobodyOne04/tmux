@@ -1,6 +1,6 @@
 # 0003. Alt keys for everyday actions, navigation shared with nvim, prefix stays Ctrl-b
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 Everything done all day is Alt + key with no prefix, and Alt-h/j/k/l moves across tmux panes
