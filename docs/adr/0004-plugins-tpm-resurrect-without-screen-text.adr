@@ -17,6 +17,7 @@ but never write the text on screen to disk.
   `TMUX_PLUGIN_MANAGER_PATH=~/.local/share/tmux/plugins`; tpm is cloned if missing, then
   `install_plugins` runs in the background on every start, because tpm only installs right
   after it is cloned. `make update` installs and updates all; `make clean` deletes them.
+- **Plugin location** (2026-11-19): plugins now live in `$ARCHMINIMAL_PLUGINS/tmux` (`/opt/archminimal/plugins/tmux`, `~/.local/share/tmux/plugins` on machines without `/opt/archminimal`), per archminimal-setup ADR-0010; saved sessions stay in `~/.local/share/tmux/resurrect`.
 - **Sessions**: `@resurrect-dir ~/.local/share/tmux/resurrect`, `@continuum-save-interval 15`,
   `@continuum-restore on`; restarted programs: `lazygit btop k9s ssh "~uv run" "~go run"
   "~make run-server"`. Manual save / restore: `prefix C-s` / `prefix C-r`.

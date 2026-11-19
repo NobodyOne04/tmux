@@ -17,6 +17,7 @@ both machines, from one set of files.
   (`source-file -F '#{d:current_file}/conf/…'`), so it works linked or not.
 - **State outside the repo**: plugins and saved sessions live in
   `~/.local/share/tmux/{plugins,resurrect}`, never in git.
+- **Plugin location** (2026-11-19): plugins now live in `$ARCHMINIMAL_PLUGINS/tmux` (`/opt/archminimal/plugins/tmux`, `~/.local/share/tmux/plugins` on machines without `/opt/archminimal`), per archminimal-setup ADR-0010; saved sessions stay in `~/.local/share/tmux/resurrect`.
 - **Platforms**: the same files on macOS (Homebrew, Ghostty with
   `macos-option-as-alt = left`) and Arch (pacman). `make deps` installs tmux, fzf, zoxide,
   lazygit, btop, eza, python3 with whichever package manager exists.

@@ -21,8 +21,9 @@ tmux             # or: tms   (pick a project straight from the shell)
 ```
 
 `make link` moves an existing `~/.tmux.conf` to `~/.tmux.conf.bak-<date>`: tmux reads that file *instead of*
-`~/.config/tmux/tmux.conf`. `make unlink` restores it. Plugins and saved sessions live in
-`~/.local/share/tmux`, never in this repo.
+`~/.config/tmux/tmux.conf`. `make unlink` restores it. Plugins live in
+`/opt/archminimal/plugins/tmux` (outside home; `~/.local/share/tmux/plugins` without
+`/opt/archminimal`), never in this repo. Saved sessions stay in `~/.local/share/tmux/resurrect`.
 
 macOS (Ghostty): Alt is the **left** Option key (`macos-option-as-alt = left`).
 
