@@ -2,7 +2,8 @@
 
 SHELL   := /bin/bash
 .DEFAULT_GOAL := help
-PLUGINS := $(HOME)/.local/share/tmux/plugins
+# same place as conf/plugins.conf picks (archminimal-setup ADR-0010)
+PLUGINS := $(if $(wildcard /opt/archminimal),$(or $(ARCHMINIMAL_PLUGINS),/opt/archminimal/plugins)/tmux,$(HOME)/.local/share/tmux/plugins)
 
 .PHONY: help install deps link unlink status check reload update clean
 

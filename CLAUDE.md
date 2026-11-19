@@ -16,7 +16,8 @@ so the checked-out branch is the config the next tmux server loads. Keys and fea
 - `conf/options.conf` behaviour · `conf/keys.conf` bindings + the prefix-Space menu · `conf/theme.conf` look
   (palette in its header) · `conf/plugins.conf` plugin settings, tpm bootstrap.
 - `bin/tms`: session picker (fzf over open sessions, zoxide, `~/projects`), also linked to `~/.local/bin/tms`.
-- Plugins and saved sessions live outside the repo: `~/.local/share/tmux/{plugins,resurrect}`.
+- Plugins live in `/opt/archminimal/plugins/tmux` (`$ARCHMINIMAL_PLUGINS/tmux`, archminimal-setup ADR-0010),
+  saved sessions in `~/.local/share/tmux/resurrect`. `conf/plugins.conf` and the Makefile pick the same path.
 - `docs/adr/`: decision records (`.adr`), index in `docs/adr/README.md`.
 
 ## Conventions

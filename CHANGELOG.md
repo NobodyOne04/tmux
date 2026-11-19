@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- Plugins live in `/opt/archminimal/plugins/tmux` (`$ARCHMINIMAL_PLUGINS/tmux`), outside home; machines without `/opt/archminimal` keep `~/.local/share/tmux/plugins`
+
 ### Added
 - ADRs in `docs/adr/`: the decisions behind the config, recorded retroactively
 - `CLAUDE.md`: how to work on this repo with Claude Code
