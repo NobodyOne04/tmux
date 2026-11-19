@@ -1,6 +1,6 @@
 # 0004. Plugins through tpm; sessions survive reboots without saving screen text
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 tpm installs a small plugin set, and resurrect + continuum bring sessions back after a reboot,

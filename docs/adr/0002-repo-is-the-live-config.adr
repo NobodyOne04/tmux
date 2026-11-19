@@ -1,6 +1,6 @@
 # 0002. The repo is the live config, one config for macOS and Arch, tmux 3.5+
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 `~/.config/tmux` is a symlink to this repo, so the checked-out branch is what tmux loads, on

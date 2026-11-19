@@ -14,5 +14,6 @@
 - README and `make deps` said tmux 3.4+; the config needs 3.5+ (`extended-keys-format`)
 
 ### Changed
+- ADRs 0001-0007 accepted
 - Saved sessions no longer include the text on screen (`@resurrect-capture-pane-contents off`): it would put
   printed secrets on disk, unencrypted, every 15 min
