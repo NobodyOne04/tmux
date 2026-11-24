@@ -80,11 +80,11 @@ on macOS, Wayland and over ssh alike.
 
 `Alt-s` in tmux, or `tms` in any shell (it's linked into `~/.local/bin`):
 
-- Lists open sessions (`●`, most recent first), then zoxide's frequent folders, then `~/projects/*`; the preview
+- Lists open sessions (`●`, most recent first), then zoxide's frequent folders, then `~/projects/*` and, when it exists, `/opt/archminimal/*` (archminimal); the preview
   shows a session's screen or a folder's files.
 - Picking a folder opens (or creates) a session named after it, starting in that folder, so direnv activates the
   project's `.env` and venv right away.
-- `tms ~/some/dir` skips the picker. `TMS_PROJECTS=~/work tms` uses another projects folder.
+- `tms ~/some/dir` skips the picker. `TMS_PROJECTS=~/work tms` uses that folder instead of both.
 
 ## Layout
 

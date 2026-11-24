@@ -2,14 +2,16 @@
 # tms [folder]: jump to a project's tmux session, creating it if needed.
 #
 #   no argument: fuzzy-pick from open sessions (●), zoxide's frequent folders
-#   and ~/projects. One session per project, named after its folder; direnv
+#   and ~/projects (+ /opt/archminimal on archminimal). One session per project, named after its folder; direnv
 #   loads the project's .envrc as soon as the shell starts there.
 #   Inside tmux it switches the client; outside it attaches.
 #
 #   in the picker:  Enter open · Ctrl-x kill the selected session
 set -euo pipefail
 
-projects=${TMS_PROJECTS:-$HOME/projects}
+projects=("${TMS_PROJECTS:-$HOME/projects}")
+# archminimal keeps its repos outside home (archminimal-setup ADR-0007)
+[[ -z ${TMS_PROJECTS:-} && -d /opt/archminimal ]] && projects+=(/opt/archminimal)
 
 session_name() { basename "$1" | tr '.: ' '___'; }
 
@@ -19,7 +21,8 @@ candidates() {
     sort -rn | awk '$2 != "scratch" { print "●\t" $2 }' || true   # no server yet: no sessions
   {
     if command -v zoxide >/dev/null; then zoxide query -l 2>/dev/null | head -n 40 || true; fi
-    find "$projects" -mindepth 1 -maxdepth 1 -type d ! -name '.*' 2>/dev/null | sort
+    # a missing root makes find fail: the other roots still count (pipefail)
+    { find "${projects[@]}" -mindepth 1 -maxdepth 1 -type d ! -name '.*' ! -path /opt/archminimal/plugins 2>/dev/null || true; } | sort
   } | awk '!seen[$0]++' | sed "s|^$HOME|~|" | awk '{ print " \t" $0 }'
 }
 
